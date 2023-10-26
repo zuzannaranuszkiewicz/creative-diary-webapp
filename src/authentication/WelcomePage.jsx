@@ -6,7 +6,7 @@ export default function WelcomePage(){
 
     return(
         <>
-          {/* <LogIn/> */}
+          <LogIn/>
           <CreateAccount/>  
         </>
     )

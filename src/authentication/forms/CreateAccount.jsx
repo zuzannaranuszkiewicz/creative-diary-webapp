@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../../firebase-config";
 import { database } from "../../../firebase-config";
@@ -6,11 +7,14 @@ import { ref, set } from "firebase/database";
 
 export default function CreateAccount(){
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState(''); 
+    const [password, setPassword] = useState('');
+    const [username, setUsername] = useState('');
+    const navigate = useNavigate();
 
-    async function writeUserData(userID, email) {
+    async function writeUserData(userID, email, username) {
         set(ref(database, 'users/' + userID), {
-          email: email,
+            username: username,
+            email: email,
         });
       }
 
@@ -19,19 +23,26 @@ export default function CreateAccount(){
         e.preventDefault(); 
         createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-            console.log(userCredential);
-            writeUserData(userCredential.user.uid, email);
+            writeUserData(userCredential.user.uid, email, username);
+            navigate('/dashboard');
+            // navigate user to dashboard with UseNAvigate
         })
         .catch((error) =>{
             console.log(error);
         });
     }
 
-
     return(
         <section>
             <h1>Create Account</h1>
             <form onSubmit={SignUp}>
+                <label >Name:</label>
+                <input 
+                    type='text' 
+                    value={username} 
+                    onChange={(e => setUsername(e.target.value))}
+                    placeholder="Jane Doe"/>
+
                 <label >E-mail:</label>
                 <input 
                     type='email' 

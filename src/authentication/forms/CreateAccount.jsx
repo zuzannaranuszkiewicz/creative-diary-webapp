@@ -11,6 +11,7 @@ export default function CreateAccount(){
     const [username, setUsername] = useState('');
     const navigate = useNavigate();
 
+    // upload user data to Realtime Database
     async function writeUserData(userID, email, username) {
         set(ref(database, 'users/' + userID), {
             username: username,
@@ -23,9 +24,11 @@ export default function CreateAccount(){
         e.preventDefault(); 
         createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
+            //call function that uploads data from Authentication to Realtime Database
             writeUserData(userCredential.user.uid, email, username);
-            navigate('/dashboard');
             // navigate user to dashboard with UseNAvigate
+            navigate('/dashboard');
+            localStorage.setItem("currentUserUID", userCredential.user.uid)
         })
         .catch((error) =>{
             console.log(error);

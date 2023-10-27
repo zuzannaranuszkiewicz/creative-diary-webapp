@@ -1,10 +1,11 @@
 import { SideBar } from "./components/SideBar";
 import { UserAuth } from "../authentication/context/AuthContext";
-import { BrainDump } from "./components/BrainDump";
+import { BrainDump, DailyChallenge } from "./components/BrainDump";
+import { GetUser } from "./components/functions/functions";
 
 
 export default function Dashboard(){
-    const { user } = UserAuth();
+    
     
     const currentDate = () => {
         var today = new Date();
@@ -23,14 +24,21 @@ export default function Dashboard(){
         return formattedDate;
       }; 
 
+    // call function that will take user data from database
+    const { user } = UserAuth();
+    const userName = GetUser(user.uid);
+
     return(
         <>
             <SideBar/>
             <p>{currentDate()}</p>
             <h1>This is dashboard</h1>
-            <p>Welcome, {user && user.uid}</p>
+
+            {/* "if(&&) there is userName, display <p></p>" */}
+            {userName && userName.username && (<p>Welcome, {userName.username}</p>)}
             <section>
-                <BrainDump/>
+                {/* <BrainDump/> */}
+                <DailyChallenge/>
             </section>
         </>
     )

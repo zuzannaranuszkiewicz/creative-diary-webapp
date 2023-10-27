@@ -1,3 +1,4 @@
+import { EntryGroup } from "./components/EntryGroup";
 import { SideBar } from "./components/SideBar";
 
 
@@ -8,7 +9,7 @@ export default function Library(){
         <SideBar/>
             <h1>Library</h1>
             <section>
-                There is place for all entries lolz
+                <EntryGroup/>
             </section>
         </>
     )

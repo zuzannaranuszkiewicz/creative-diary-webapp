@@ -14,6 +14,7 @@ export default function LogIn(){
     
         signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
+            localStorage.setItem("currentUserUID", userCredential.user.uid)
             navigate('/dashboard');
         })
             .catch((error) =>{

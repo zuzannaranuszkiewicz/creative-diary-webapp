@@ -28,6 +28,8 @@ function App() {
             <Route path="/library" element={<ProtectedRoute><Library/></ProtectedRoute>}/>
             <Route path="/calendar" element={<ProtectedRoute><Calendar/></ProtectedRoute>}/>
             <Route path="/account" element={<ProtectedRoute><Account/></ProtectedRoute>}/>
+            <Route path="/:entryID" element={<ProtectedRoute></ProtectedRoute>}/>
+
           </Routes>
     </AuthContextProvider>
       

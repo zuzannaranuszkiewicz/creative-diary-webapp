@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {ref, set, push, serverTimestamp, onValue} from "firebase/database";
 import { database } from "../../../firebase-config";
 import { UserAuth } from "../../authentication/context/AuthContext";
 
 // function to get time and display it below title
 // it is global, so can be used in all functions below
-const currentDate = () => {
+export const currentDate = () => {
     var today = new Date();
     // var options = { weekday: 'long' };
     var day = String(today.getDate()).padStart(2, '0');
@@ -21,14 +22,45 @@ const currentDate = () => {
   }; 
 
 
+export function ChooseInputType(){
+    return(
+        <>
+            <h2>Choose a new entry</h2>
+            <div>
+                <Link to="/dashboard/BrainDump">
+                    <div>
+                        <img></img>
+                        <p>Brain Dump</p>
+                    </div>
+                </Link>
+
+                <Link to="/dashboard/DailyChallenge">
+                    <div>
+                        <img></img>
+                        <p>Daily Challenge</p>
+                    </div>
+                </Link>
+
+                <Link to="/dashboard/CreativityBooster">
+                    <div>
+                        <img></img>
+                        <p>Creativity Booster</p>
+                    </div>
+                </Link>
+            </div>
+        </>
+    )
+}
+
+
 
 export function BrainDump(){
-    
-    // const and function to store and upload BrainDump to Firebase Database
+    const navigate = useNavigate();
     const [title, setTitle] = useState('');
     const [userInput, setUserInput] = useState('');
     const {user} = UserAuth();
     const userID = user.uid;
+
 
       function saveBrainDump() {
         // getting new key ID for new BrainDump
@@ -44,12 +76,16 @@ export function BrainDump(){
         });
 
         // confirmation
-        alert("BrainDump saved!")
+        alert("BrainDump saved!");
+        // navigate to ChooseInputType component
+        navigate("/dashboard/ChooseEntryType")
       }
+
 
     return(
         <>
             <div>
+               
                 <input type="text" value={title} onChange={(e => setTitle(e.target.value))} placeholder="Untitled"/>
                 <p>{currentDate()}</p>
             </div>
@@ -69,6 +105,7 @@ export function BrainDump(){
 
 
 export function DailyChallenge(){
+    const navigate = useNavigate();
     const [prompt, setPrompt] = useState('');
     const [userInput, setUserInput] = useState('');
     const [generatedID, setGeneratedID] = useState ('');
@@ -76,38 +113,40 @@ export function DailyChallenge(){
     const userID = user.uid;
 
 
-    //hook to check that we don't generate the prompt that user has already answered to
     useEffect(() => {
         function generateUniquePromptID() {
-            let newGeneratedID = Math.floor(Math.random() * 41) + 1;
+            let newGeneratedID = Math.floor(Math.random() * 41) + 1; 
+
+            //loading data from user, checking if they already answered for this prompt
             const userPromptsRef = ref(database, 'users/' + userID + '/prompts/');
             onValue(userPromptsRef, (snapshot) => {
                 const data = snapshot.val();
+                
                 if (data && data[newGeneratedID]) {
-                    generateUniquePromptID(); // ID already exists, generate a new one
+                    generateUniquePromptID(); // if ID already exists, generate a new one (call function again)
                 } else {
-                    setGeneratedID(newGeneratedID); // Set the generated ID
+                    setGeneratedID(newGeneratedID); // if Id is not used yet, set the generated ID
                 }
             });
         }
-        generateUniquePromptID(); // Load a unique prompt ID on component mount
-    }, []); 
 
-    useEffect(() => {
         function generatePrompt() {
+                   // loading prompt data, searching for the one with ID we just generated
+            if(generatedID !== '') {
             const promptRef = ref(database, `prompts/${generatedID}`);
             onValue(promptRef, (snapshot) => {
-              const data = snapshot.val();
-              if (data) {
-                setPrompt(data.prompt); // Set the prompt text, assuming 'data' has a 'prompt' property
-              }
+            const data = snapshot.val();
+            if (data) {setPrompt(data.prompt);}
             });
-          }
-        generatePrompt(); // Load a prompt on component mount
-      }, []); // Empty dependency array to run only once
-    
-      
+            }
+        }
 
+        // calling function we just wrote, cuz otherwise they won't work 
+        generateUniquePromptID();
+        generatePrompt(); // generate ID
+    }, [generatedID]); //running UseEffect every time, when generatedID changes
+
+      
     function saveDailyChallenge() {
         // getting new key ID for new DailyChallenge
         const newEntry = push(ref(database, 'entries/' + userID));
@@ -125,17 +164,19 @@ export function DailyChallenge(){
 
         // confirmation
         alert("DailyChallenge saved!")
+        navigate('/dashboard/ChooseEntryType');
       }
-
-
 
     return(
         <>
-            <div>
-                <p>{prompt}</p>
-                <p>{currentDate()}</p>
+            <div style={{display:"flex", gap:"2rem"}}>
+                <div>
+                    <h2>{prompt}</h2>
+                    <p>{currentDate()}</p>
+                </div>
+                <button onClick={saveDailyChallenge}>Save</button>
             </div>
-            <button onClick={saveDailyChallenge}>Save</button>
+           
             <hr/>
 
             <input type="text" value={userInput} onChange={(e => setUserInput(e.target.value))} placeholder="What is it you're thinking of..."/>
@@ -143,6 +184,20 @@ export function DailyChallenge(){
                 Space for toolbar
             </div>
           
+        </>
+    )
+}
+
+export function CreativityBooster(){
+    const navigate = useNavigate();
+    function openSTH(){
+        navigate('/dashboard/ChooseEntryType');
+    }
+
+    return(
+        <>
+            <h2>Today's activity</h2>
+            <button onClick={openSTH}>Save</button>
         </>
     )
 }

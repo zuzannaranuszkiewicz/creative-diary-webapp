@@ -27,7 +27,7 @@ export default function CreateAccount(){
             //call function that uploads data from Authentication to Realtime Database
             writeUserData(userCredential.user.uid, email, username);
             // navigate user to dashboard with UseNAvigate
-            navigate('/dashboard');
+            navigate('/dashboard/BrainDump');
             localStorage.setItem("currentUserUID", userCredential.user.uid)
         })
         .catch((error) =>{

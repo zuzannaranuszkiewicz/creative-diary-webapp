@@ -25,6 +25,7 @@ function GetEntries(userId) {
             text: value.text,
             timestamp: value.timestamp,
             title: value.title,
+            projects: value.projects
           }));
           setEntries(entriesArray);
         }
@@ -37,8 +38,8 @@ function GetEntries(userId) {
 }
 
 function filterEntries(entries, filters) {
-  const { keywords, date, inputType } = filters;
-  if (!keywords && !date && !inputType) {
+  const { keywords, date, inputType, tags, projects} = filters;
+  if (!keywords && !date && !inputType && !tags && !projects) {
     return entries; // Return all entries if no filters are provided
   }
   return entries.filter((entry) => {
@@ -54,6 +55,12 @@ function filterEntries(entries, filters) {
     if (inputType && entry.inputType === inputType) {
       return true;
     }
+    if (tags&& entry.tags && entry.tags.includes(projects)) {
+      return true;
+    }
+    if (projects && entry.projects && entry.projects.includes(projects)) {
+      return true;
+    }
     return false;
   });
 }
@@ -61,12 +68,13 @@ function filterEntries(entries, filters) {
 
 export function EntryGroup(props){
   const { user } = UserAuth();
-  const { keywords, date, inputType } = props; // Destructure the props
   const entries = GetEntries(user.uid);
+
+  const { keywords, date, inputType, tags, projects } = props; // Destructure the props
   let filteredEntries = entries;
 
-  if (keywords || date || inputType) {
-    filteredEntries = filterEntries(entries, { keywords: keywords, date: date, inputType: inputType });
+  if (keywords || date || inputType || tags || projects) {
+    filteredEntries = filterEntries(entries, { keywords: keywords, date: date, inputType: inputType, tags: tags, projects: projects });
   }
 
   return (

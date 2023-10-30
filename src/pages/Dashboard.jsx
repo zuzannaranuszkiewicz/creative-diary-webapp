@@ -3,7 +3,7 @@ import { UserAuth } from "../authentication/context/AuthContext";
 import { GetUser } from "./components/functions/functions";
 import { Outlet, useNavigate } from "react-router-dom";
 import { EntryGroup } from "./components/EntryGroup";
-import { currentDate } from "./components/BrainDump";
+import { currentDate } from "./components/EntryTypes";
 import { useState } from "react";
 
 

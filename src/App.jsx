@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import {Navigate, Routes, Route } from 'react-router-dom'
 import './App.css'
 import Dashboard from './pages/Dashboard'
@@ -8,7 +7,7 @@ import Account from './pages/Account'
 import WelcomePage from './authentication/WelcomePage'
 import { AuthContextProvider } from './authentication/context/AuthContext'
 import { UserAuth } from './authentication/context/AuthContext'
-import { BrainDump, ChooseInputType, CreativityBooster, DailyChallenge } from './pages/components/BrainDump'
+import { BrainDump, ChooseInputType, CreativityBooster, DailyChallenge } from './pages/components/EntryTypes'
 
 function App() {
 

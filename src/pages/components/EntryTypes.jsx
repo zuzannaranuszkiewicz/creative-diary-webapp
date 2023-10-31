@@ -4,7 +4,7 @@ import {ref, set, push, serverTimestamp, onValue} from "firebase/database";
 import { database } from "../../../firebase-config";
 import { UserAuth } from "../../authentication/context/AuthContext";
 import { AddProject, SelectProject } from "./Projects";
-import { AddTag } from "./Tags";
+import { AddTag, SelectTag } from "./Tags";
 
 // function to get time and display it below title
 // it is global, so can be used in all functions below
@@ -70,7 +70,6 @@ export function SaveEntry({open, onClose, ...props}){
             set(ref(database, 'users/' + userID + '/prompts/' + promptID), true);
         }
 
-        console.log("hallo alret")
         // confirmation
         alert("Entry saved!");
         navigate("/dashboard/ChooseEntryType")
@@ -85,7 +84,8 @@ export function SaveEntry({open, onClose, ...props}){
                 <button onClick={onClose}>x</button>
                     <div>
                         <h2>Add Tags</h2>
-                        {/* <AddTag/> */}
+                        <SelectTag onTagSelect={setSelectedTags}/>
+                        <AddTag/>
                     </div>
                     <div>
                         <h2>Assign to a Project</h2>

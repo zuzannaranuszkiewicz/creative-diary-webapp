@@ -2,14 +2,20 @@ import { useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react";
 import { UserAuth } from "../../authentication/context/AuthContext";
 import { GetProjects } from "./Projects";
+import { GetTags } from "./Tags";
 
 
 export function EntryCard({entry}){
+    const { user } = UserAuth();
     // navigate to "entry" page after clicking on it
     const navigate = useNavigate();
     const [projectNames, setProjectNames] = useState([]);
-    const { user } = UserAuth(); 
+    const [tagNames, setTagNames] = useState([]);
     const projects = GetProjects(user.uid);
+    const tags = GetTags(user.uid);
+
+    
+    
 
     useEffect(() => {
         if (entry.projects && entry.projects.length > 0) { 
@@ -19,7 +25,17 @@ export function EntryCard({entry}){
             });
             setProjectNames(mappedProjects);
         }
-    }, [entry.projects, projects]); // dependencies array that triggers the effect every time when 'entry.projects' or 'projects' change
+    }, [entry.projects, projects]); 
+    
+    useEffect(() => {
+        if (entry.tags && entry.tags.length > 0) { 
+            const mappedTags = entry.tags.map((tagId) => { 
+                const tag = tags.find((e) => e.id === tagId); // (e) is a single project, e.id is an ID of this single project
+                return tag ? tag.name : " "; // returning the name of the project if it exists, otherwise returning an empty string
+            });
+            setTagNames(mappedTags);
+        }
+    }, [entry.projects, projects]);// dependencies array that triggers the effect every time when 'entry.projects' or 'projects' change
     
 
     function handleClick(){
@@ -34,9 +50,9 @@ export function EntryCard({entry}){
                 <p>{entry.text}</p>
 
                 {/* Render tags */}
-                {entry.tags && entry.tags.length > 0 && (
+                {tagNames && tagNames.length > 0 && (
                     <div>
-                        Tags: {entry.tags.join(", ")}
+                        Tags: {tagNames.tags.join(", ")}
                     </div>
                 )}
 

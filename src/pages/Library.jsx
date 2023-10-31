@@ -2,9 +2,18 @@ import { EntryGroup } from "./components/EntryGroup";
 import { SideBar } from "./components/SideBar";
 import { AddProject, ProjectGroup } from "./components/Projects";
 import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function Library(){
+    const navigate = useNavigate('');
     const [openModal, setOpenModal] = useState(false);
+
+    const BrainDumpGroup = () => {
+        // Replace the sample data with your actual variables
+         const inputType="BrainDump";   
+        console.log(inputType);
+        navigate('/group-page', {state: {inputType}});
+      };
 
     return(
         <>
@@ -14,7 +23,7 @@ export default function Library(){
             <div className="searchBar">
                 <input type="text" />
 
-                <button value="BrainDump">Brain Dump</button>
+                <Link><button value="BrainDump">Brain Dump</button></Link>
                 <button value="DailyChallenge">Daily Challenge</button>
                 <button value="CreativityBooster">Creativity Booster</button>
 
@@ -23,6 +32,7 @@ export default function Library(){
             <section>
                 <div>
                     <h2>Brain Dump</h2>
+                    
                     <EntryGroup inputType={"BrainDump"}/>
                 </div>
 

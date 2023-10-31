@@ -1,12 +1,16 @@
 import { EntryGroup } from "./components/EntryGroup";
+import { SideBar } from "./components/SideBar";
+import { useParams } from "react-router-dom";
 
-export function GroupPage(props) {
-
-    const {inputType, tagID, tagName} = props; 
+export function GroupPage() {
+    console.log(props);
+    const {} = useParams();
+    const {inputType, tagID, tagName} = param; 
 
     return (
         <>
-        <h2>library/{inpuptType || tagName}</h2>
+        <SideBar/>
+        <h2>library/{inputType || tagName}</h2>
         <EntryGroup inputType={inputType} tagID={tagID}/>
         </>
     )
@@ -18,6 +22,7 @@ export function ProjectPage(props){
     
     return(
         <>
+            <SideBar/>
             <h2>library/projects/{projectName}</h2>
             <EntryGroup projectID={projectID}/>
         </>

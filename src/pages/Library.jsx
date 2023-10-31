@@ -8,12 +8,10 @@ export default function Library(){
     const navigate = useNavigate('');
     const [openModal, setOpenModal] = useState(false);
 
-    const BrainDumpGroup = () => {
-        // Replace the sample data with your actual variables
-         const inputType="BrainDump";   
-        console.log(inputType);
-        navigate('/group-page', {state: {inputType}});
-      };
+    function handleClick(inputType){
+        navigate(`/group/${inputType}`)
+    }
+
 
     return(
         <>
@@ -23,13 +21,13 @@ export default function Library(){
             <div className="searchBar">
                 <input type="text" />
 
-                <Link><button value="BrainDump">Brain Dump</button></Link>
-                <button value="DailyChallenge">Daily Challenge</button>
-                <button value="CreativityBooster">Creativity Booster</button>
+                <button value="BrainDump" onClick={() => handleClick("BrainDump")}>Brain Dump</button>
+                <button value="DailyChallenge" onClick={() => handleClick("DailyChallenge")}>Daily Challenge</button>
+                <button value="CreativityBooster"onClick={() => handleClick("CreativityBooster")} >Creativity Booster</button>
 
             </div>
 
-            <section>
+            <section className="allgroups">
                 <div>
                     <h2>Brain Dump</h2>
                     

@@ -25,7 +25,8 @@ function GetEntries(userId) {
             text: value.text,
             timestamp: value.timestamp,
             title: value.title,
-            projects: value.projects
+            projects: value.projects,
+            tags: value.tags
           }));
           setEntries(entriesArray);
         }
@@ -55,7 +56,7 @@ function filterEntries(entries, filters) {
     if (inputType && entry.inputType === inputType) {
       return true;
     }
-    if (tags&& entry.tags && entry.tags.includes(projects)) {
+    if (tags&& entry.tags && entry.tags.includes(tags)) {
       return true;
     }
     if (projects && entry.projects && entry.projects.includes(projects)) {

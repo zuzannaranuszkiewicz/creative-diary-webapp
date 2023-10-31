@@ -51,7 +51,6 @@ export default function Dashboard(){
                     <option value="DailyChallenge">Daily Challenge</option>
                     <option value="CreativityBooster">Creativity Booster</option>
                 </select>
-
             </section>
 
             <Outlet/>

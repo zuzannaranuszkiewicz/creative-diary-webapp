@@ -8,7 +8,7 @@ import WelcomePage from './authentication/WelcomePage'
 import { AuthContextProvider } from './authentication/context/AuthContext'
 import { UserAuth } from './authentication/context/AuthContext'
 import { BrainDump, ChooseInputType, CreativityBooster, DailyChallenge } from './pages/components/EntryTypes'
-import { GroupPage, ProjectPage } from './pages/GroupAndProjectPage'
+import { GroupPage, ProjectPage, TagsPage } from './pages/GroupAndProjectPage'
 
 function App() {
 
@@ -31,7 +31,8 @@ function App() {
                 <Route path="CreativityBooster" element={<ProtectedRoute><CreativityBooster/></ProtectedRoute>}/>
                 <Route path="ChooseEntryType" element={<ProtectedRoute><ChooseInputType/></ProtectedRoute>}/>
             </Route>
-            <Route path="/group/:inputType?/:tagName?/:tagID?" element={<ProtectedRoute><GroupPage/></ProtectedRoute>}/>
+            <Route path="/group/:inputType" element={<ProtectedRoute><GroupPage/></ProtectedRoute>}/>
+            <Route path="/tags/:tagID/:tagName?" element={<ProtectedRoute><TagsPage/></ProtectedRoute>}/>
             <Route path="/projects/:projectName/:projectID" element={<ProtectedRoute><ProjectPage/></ProtectedRoute>}/>
             <Route path="/library" element={<ProtectedRoute><Library/></ProtectedRoute>}/>
             <Route path="/calendar" element={<ProtectedRoute><Calendar/></ProtectedRoute>}/>

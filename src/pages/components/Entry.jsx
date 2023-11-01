@@ -7,12 +7,13 @@ import { GetTags } from "./Tags";
 
 export function EntryCard({entry}){
     const { user } = UserAuth();
+    const projects = GetProjects(user.uid);
+    const tags = GetTags(user.uid);
     // navigate to "entry" page after clicking on it
     const navigate = useNavigate();
     const [projectNames, setProjectNames] = useState([]);
     const [tagNames, setTagNames] = useState([]);
-    const projects = GetProjects(user.uid);
-    const tags = GetTags(user.uid);
+    
 
 
 
@@ -39,8 +40,10 @@ export function EntryCard({entry}){
     
     
     function handleTagClick(tag) {
+        const tagName = tag.name;
+        const tagID = tag.id;
         if (tag) {
-            navigate(`/group/${tag.name}/${tag.id}`);
+            navigate(`/tags/${tag.id}/${tag.name}`);
         }
     }
 
@@ -59,7 +62,6 @@ export function EntryCard({entry}){
                 <p>{entry.text}</p>
 
                 {/* Render tags as buttons */}
-                {console.log(tagNames)}
                 {tagNames && tagNames.length > 0 && (
                 <div>
                     Tags:{" "}

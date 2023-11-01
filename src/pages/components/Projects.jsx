@@ -30,8 +30,8 @@ export function GetProjects(userId) {
       };
       fetchData();
     }, [userId]);
-  
-    return projects;
+    
+    return projects;    
   }
 
 
@@ -42,7 +42,7 @@ export function ProjectGroup(){
     return (
       <div>
         {projects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
+          <ProjectCard key={project.id} project={project}/>
         ))}
       </div>
     );
@@ -96,12 +96,15 @@ export function SelectProject({ onProjectSelect }) {
 
 export function ProjectCard({project}){
     const navigate = useNavigate();
-    function handleClick(){
-        navigate(`/${project.id}`)
-    }
 
+    // function handleProjectClick(project) {
+    //     if (project) {
+    //         navigate(`/projects/${project.name}/${project.id}`);
+    //     }
+    // }
+    console.log(project);
     return(
-        <div key={project.id} className="projectCard">
+        <div key={project.id} className="projectCard" onClick={() => handleProjectClick(project)}>
             <p>{project.timeperiod}</p>
             <h2>{project.name}</h2>
         </div>

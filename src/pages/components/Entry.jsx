@@ -16,7 +16,6 @@ export function EntryCard({entry}){
     
 
 
-
     useEffect(() => {
         if (entry.projects && entry.projects.length > 0) { 
             const mappedProjects = entry.projects.map((projectId) => { 
@@ -53,7 +52,6 @@ export function EntryCard({entry}){
         }
     }
 
-    console.log(entry);
 
     return(
               <div key={entry.id} className="entryCard">

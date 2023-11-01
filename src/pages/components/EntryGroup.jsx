@@ -40,16 +40,18 @@ function GetEntries(userId) {
   return entries;
 }
 
-  
-
 function filterEntries(entries, filters) {
-  const { keywords, date, inputType, tags, projects} = filters;
+  const { keywords, date, inputType, tags, projects } = filters;
   if (!keywords && !date && !inputType && !tags && !projects) {
     return entries; // Return all entries if no filters are provided
   }
   return entries.filter((entry) => {
     // Filter by keywords (searching for the same words in title and text)
-    if (keywords && (entry.title.includes(keywords) || entry.text.includes(keywords))) {
+    if (
+      keywords &&
+      (entry.title && entry.title.includes(keywords)) ||
+      (entry.text && entry.text.includes(keywords))
+    ) {
       return true;
     }
     // Filter by date (timestamp)
@@ -60,7 +62,7 @@ function filterEntries(entries, filters) {
     if (inputType && entry.inputType === inputType) {
       return true;
     }
-    if (tags&& entry.tags && entry.tags.includes(tags)) {
+    if (tags && entry.tags && entry.tags.includes(tags)) {
       return true;
     }
     if (projects && entry.projects && entry.projects.includes(projects)) {

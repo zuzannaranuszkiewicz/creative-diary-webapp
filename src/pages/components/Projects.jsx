@@ -35,18 +35,7 @@ export function GetProjects(userId) {
   }
 
 
-export function ProjectGroup(){
-    const { user } = UserAuth();
-    const projects = GetProjects(user.uid);
-  
-    return (
-      <div>
-        {projects.map((project) => (
-          <ProjectCard key={project.id} project={project}/>
-        ))}
-      </div>
-    );
-}
+
 
 export function SelectProject({ onProjectSelect }) {
     const { user } = UserAuth();
@@ -93,6 +82,19 @@ export function SelectProject({ onProjectSelect }) {
     );
 }
 
+export function ProjectGroup(){
+    const { user } = UserAuth();
+    const projects = GetProjects(user.uid);
+  
+    return (
+      <div>
+        {projects.map((project) => (
+          <ProjectCard key={project.id} project={project}/>
+        ))}
+      </div>
+    );
+}
+
 
 export function ProjectCard({project}){
     const navigate = useNavigate();
@@ -102,12 +104,23 @@ export function ProjectCard({project}){
             navigate(`/projects/${project.name}/${project.id}`);
         }
     }
-    console.log(project);
+    
     return(
-        <div key={project.id} className="projectCard" onClick={() => handleProjectClick(project)}>
+        <div key={project.id} className="projectCard" onClick={() => handleProjectClick(project)}
+                style={{
+                    // Changes button style based on whether the project is selected or not.
+                    backgroundColor:'gray',
+                    color: 'white',
+                    margin: '5px',
+                    padding: '10px',
+                    border: 'none',
+                    borderRadius: '5px',
+                    cursor: "pointer",
+                }}>
             <p>{project.timeperiod}</p>
             <h2>{project.name}</h2>
         </div>
+
     )
 }
 
@@ -115,7 +128,6 @@ export function ProjectCard({project}){
 
 export function AddProject({open, onClose}){
     if (!open) return null;
-
     const [name, setName] = useState('');
     const [goal, setGoal] = useState('');
     const [description, setDescription] = useState('')

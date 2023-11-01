@@ -17,6 +17,7 @@ function GetEntries(userId) {
       onValue(entriesRef, (snapshot) => {
         const data = snapshot.val();
 
+
         if (data) {
         // our "data" is mapped into array, which allows us read keys (inputType, timestamp, title), and assigned to them values ("BrainDump", day when entry was created, entry) 
           const entriesArray = Object.entries(data).map(([key, value]) => ({
@@ -35,8 +36,11 @@ function GetEntries(userId) {
     fetchData();
   }, [userId]);
 
+  // console.log(entries);
   return entries;
 }
+
+  
 
 function filterEntries(entries, filters) {
   const { keywords, date, inputType, tags, projects} = filters;

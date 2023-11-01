@@ -53,6 +53,7 @@ export function EntryCard({entry}){
         }
     }
 
+    console.log(entry);
 
     return(
               <div key={entry.id} className="entryCard">
@@ -62,7 +63,7 @@ export function EntryCard({entry}){
                 <p>{entry.text}</p>
 
                 {/* Render tags as buttons */}
-                {tagNames && tagNames.length > 0 && (
+                {entry.tags && (
                 <div>
                     Tags:{" "}
                     {tagNames.map((tag, index) => (
@@ -74,7 +75,7 @@ export function EntryCard({entry}){
                 )}
 
                 {/* Render projects as buttons */}
-                {projectNames && projectNames.length > 0 && (
+                {entry.projects &&(
                 <div>
                     Projects:{" "}
                     {projectNames.map((project, index) => (

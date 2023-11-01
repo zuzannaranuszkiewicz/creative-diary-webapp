@@ -97,11 +97,11 @@ export function SelectProject({ onProjectSelect }) {
 export function ProjectCard({project}){
     const navigate = useNavigate();
 
-    // function handleProjectClick(project) {
-    //     if (project) {
-    //         navigate(`/projects/${project.name}/${project.id}`);
-    //     }
-    // }
+    function handleProjectClick(project) {
+        if (project) {
+            navigate(`/projects/${project.name}/${project.id}`);
+        }
+    }
     console.log(project);
     return(
         <div key={project.id} className="projectCard" onClick={() => handleProjectClick(project)}>

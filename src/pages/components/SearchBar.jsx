@@ -21,20 +21,17 @@ export function SearchBar(props){
     function performSearch(){
         setSearchKeywords(keywords);
         setSearchTags(selectedTags);
+        if (tag && tag.length !== 0) {
+            setSearchTags(tag);
+        } else {
+            setSearchTags(selectedTags);
+        }
+
         if (project && project.length !== 0) {
             setSearchProjects(project);
         } else {
             setSearchProjects(selectedProjects);
         }
-
-        console.log(keywords);
-        console.log(searchKeywords);
-        console.log(selectedTags);
-        console.log(searchTags);
-        console.log(project);
-        console.log(selectedProjects);
-        console.log(searchProjects)
-
         setSearch(false);
         setShowResults(true);
     }
@@ -49,8 +46,9 @@ export function SearchBar(props){
              {search && (
                 <>
                 {(!project || project.length === 0) && <SelectProject onProjectSelect={setSelectedProjects}/>}
-                {/* <SelectProject onProjectSelect={setSelectedProjects}/> */}
-                <SelectTag onTagSelect={setSelectedTags}/>
+
+                {(!tag || tag.length === 0) &&  <SelectTag onTagSelect={setSelectedTags}/>}
+               
 
                 <button onClick={performSearch}>Search</button>
                 </>
@@ -62,7 +60,7 @@ export function SearchBar(props){
             {showResults && (
                 <>
                 {(!project || project.length === 0) && <ProjectGroup/>}
-                <EntryGroup keywords={searchKeywords} projects={searchProjects} tags={searchTags} />
+                <EntryGroup keywords={searchKeywords} projects={searchProjects} tags={searchTags} inputType={inputType}/>
                 </>
                 
             )}

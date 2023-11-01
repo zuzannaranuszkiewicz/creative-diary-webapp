@@ -30,6 +30,13 @@ export default function Library(){
 
             <section className="allgroups">
                 <div>
+                    <h2>Pinned</h2>
+                    <EntryGroup pinned="true"/>
+                </div>
+
+                <hr></hr>
+
+                <div>
                     <h2>Brain Dump</h2>
                     <a onClick={() => handleClick("BrainDump")}>see all</a>
                     <EntryGroup inputType={"BrainDump"}/>

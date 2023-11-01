@@ -3,6 +3,9 @@ import { useState, useEffect } from "react";
 import { UserAuth } from "../../authentication/context/AuthContext";
 import { GetProjects } from "./Projects";
 import { GetTags } from "./Tags";
+import { database } from "../../../firebase-config";
+import { ref, set, update } from "firebase/database";
+
 
 
 export function EntryCard({entry}){
@@ -52,13 +55,32 @@ export function EntryCard({entry}){
         }
     }
 
+    function pinEntry() {
+        const entryRef = ref(database, `entries/${user.uid}/${entry.id}`);
+      
+        if (entry.pinned === true) {
+          update(entryRef, {
+            pinned: null
+          });
+          alert("Entry unpinned!");
+        } else {
+          update(entryRef, {
+            pinned: true
+          });
+          alert("Entry pinned!");
+        }
+      }
+    
+
 
     return(
               <div key={entry.id} className="entryCard">
-                <h2>{entry.inputType}</h2>
+                <h3>{entry.inputType}</h3>
                 <p>{entry.title}</p>
                 <p>{new Date(entry.timestamp).toLocaleDateString('en-GB')}</p>
                 <p>{entry.text}</p>
+
+                <p onClick={pinEntry}>{entry.pinned ? 'Pinned' : 'Pin'}</p>
 
                 {/* Render tags as buttons */}
                 {entry.tags && (

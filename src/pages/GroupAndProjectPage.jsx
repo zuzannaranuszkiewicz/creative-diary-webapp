@@ -11,7 +11,7 @@ export function GroupPage() {
         <>
         <SideBar/>
         
-        <SearchBar/>
+        <SearchBar inputType={inputType}/>
         <h2>library/{inputType}</h2>
         <EntryGroup inputType={inputType}/>
         </>
@@ -25,7 +25,7 @@ export function TagsPage() {
         <>
         <SideBar/>
 
-        <SearchBar/>
+        <SearchBar tag={tagID}/>
         <h2>library/{tagName}</h2>
         <EntryGroup tags={tagID}/>
         </>

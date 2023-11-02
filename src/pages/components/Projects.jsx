@@ -35,28 +35,22 @@ export function GetProjects(userId) {
   }
 
 
-
-
-export function SelectProject({ onProjectSelect }) {
+  export function SelectProject({ onProjectSelect, selectedProjects }) {
     const { user } = UserAuth();
     const projects = GetProjects(user.uid);
-    const [selectedProjects, setSelectedProjects] = useState([]);
 
-  
+    const [internalSelectedProjects, setInternalSelectedProjects] = useState(selectedProjects || []);
+
     // It toggles the selection of a project by adding or removing its ID from the selectedProjects array.
     const handleProjectSelect = (projectId) => {
-        let updatedSelectedProjects = [...selectedProjects];
-        if (updatedSelectedProjects.includes(projectId)) {
-            //(removing deselected id) filtering array and leaving projectID's that are different than the one that was deselected
-            updatedSelectedProjects = updatedSelectedProjects.filter(id => id !== projectId);
-        } else {
-            //(adding selected id)
-            updatedSelectedProjects.push(projectId);
-        }
-        setSelectedProjects(updatedSelectedProjects);
+        const updatedSelectedProjects = internalSelectedProjects.includes(projectId)
+            ? internalSelectedProjects.filter((id) => id !== projectId)
+            : [...internalSelectedProjects, projectId];
+    
+        setInternalSelectedProjects(updatedSelectedProjects);
         onProjectSelect(updatedSelectedProjects);
     };
-
+    
     return (
         <div>
             {projects.map((project) => (
@@ -64,10 +58,7 @@ export function SelectProject({ onProjectSelect }) {
                     key={project.id}
                     onClick={() => handleProjectSelect(project.id)}
                     style={{
-                        // Changes button style based on whether the project is selected or not.
-                        backgroundColor: selectedProjects.includes(project.id)
-                            ? 'green'
-                            : 'gray',
+                        backgroundColor: internalSelectedProjects.includes(project.id) ? 'green' : 'gray',
                         color: 'white',
                         margin: '5px',
                         padding: '10px',
@@ -80,7 +71,10 @@ export function SelectProject({ onProjectSelect }) {
             ))}
         </div>
     );
+    
 }
+
+
 
 export function ProjectGroup(){
     const { user } = UserAuth();

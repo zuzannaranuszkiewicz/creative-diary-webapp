@@ -29,25 +29,20 @@ export function GetTags(userId){
     return tags;
 }
 
-export function SelectTag({ onTagSelect }) {
+export function SelectTag({ onTagSelect, selectedTags }) {
     const { user } = UserAuth();
     const tags = GetTags(user.uid);
-    const [selectedTags, setSelectedTags] = useState([]);
+    const [internalSelectedTags, setInternalSelectedTags] = useState(selectedTags || []);
 
     // It toggles the selection of a tag by adding or removing its ID from the selectedTags array.
     const handleTagSelect = (tagId) => {
-        let updatedSelectedTags = [...selectedTags];
-        if (updatedSelectedTags.includes(tagId)) {
-            // Removes the tag ID from the array if it's already selected
-            updatedSelectedTags = updatedSelectedTags.filter(id => id !== tagId);
-        } else {
-            // Adds the tag ID to the array if it's not already selected
-            updatedSelectedTags.push(tagId);
-        }
-        setSelectedTags(updatedSelectedTags);
+        const updatedSelectedTags = internalSelectedTags.includes(tagId)
+            ? internalSelectedTags.filter((id) => id !== tagId)
+            : [...internalSelectedTags, tagId];
+
+        setInternalSelectedTags(updatedSelectedTags);
         onTagSelect(updatedSelectedTags);
-    }
-    
+    };
 
     return (
         <div>
@@ -56,8 +51,7 @@ export function SelectTag({ onTagSelect }) {
                     key={tag.id}
                     onClick={() => handleTagSelect(tag.id)}
                     style={{
-                        // Changes button style based on whether the tag is selected or not.
-                        backgroundColor: selectedTags.includes(tag.id) ? 'green' : 'gray',
+                        backgroundColor: internalSelectedTags.includes(tag.id) ? 'green' : 'gray',
                         color: 'white',
                         margin: '5px',
                         padding: '10px',
@@ -71,6 +65,7 @@ export function SelectTag({ onTagSelect }) {
         </div>
     );
 }
+
 
 export function AddTag(){
     const [name, setName] = useState('');

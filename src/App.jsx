@@ -9,6 +9,7 @@ import { AuthContextProvider } from './authentication/context/AuthContext'
 import { UserAuth } from './authentication/context/AuthContext'
 import { BrainDump, ChooseInputType, CreativityBooster, DailyChallenge } from './pages/components/EntryTypes'
 import { GroupPage, ProjectPage, TagsPage } from './pages/GroupAndProjectPage'
+import { EntryEdit } from './pages/EntryEdit'
 
 function App() {
 
@@ -37,7 +38,7 @@ function App() {
             <Route path="/library" element={<ProtectedRoute><Library/></ProtectedRoute>}/>
             <Route path="/calendar" element={<ProtectedRoute><Calendar/></ProtectedRoute>}/>
             <Route path="/account" element={<ProtectedRoute><Account/></ProtectedRoute>}/>
-            <Route path=":entryID" element={<ProtectedRoute></ProtectedRoute>}/>
+            <Route path=":entryID" element={<ProtectedRoute><EntryEdit/></ProtectedRoute>}/>
           </Routes>
     </AuthContextProvider>
       

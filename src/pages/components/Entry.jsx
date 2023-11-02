@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useState, useEffect } from "react";
 import { UserAuth } from "../../authentication/context/AuthContext";
 import { GetProjects } from "./Projects";
@@ -16,10 +16,8 @@ export function EntryCard({entry}){
     const [projectNames, setProjectNames] = useState([]);
     const [tagNames, setTagNames] = useState([]);
 
+    const [openEntryOptions, setOpenEntryOptions] = useState(false);
     const [openEntryDisplay, setOpenEntryDisplay] = useState(false);
-
-    
-
 
     useEffect(() => {
         if (entry.projects && entry.projects.length > 0) { 
@@ -71,8 +69,6 @@ export function EntryCard({entry}){
         }
       }
     
-
-
     return(
               <div key={entry.id} className="entryCard" >
                 <div onClick={() => setOpenEntryDisplay(true)}>
@@ -80,14 +76,14 @@ export function EntryCard({entry}){
                     <p>{entry.title}</p>
                     <p>{new Date(entry.timestamp).toLocaleDateString('en-GB')}</p>
                     <p>{entry.text}</p>
-                </div>
+                
                 
 
                 <p onClick={() => pinEntry(entry, user)}>{entry.pinned === "true" ? 'Pinned' : 'Pin'}</p>
 
                 {/* Render tags as buttons */}
                 {entry.tags && (
-                <div>
+                <div onClick={(e => {e.stopPropagation();})}>
                     Tags:{" "}
                     {tagNames.map((tag, index) => (
                     <button key={index} onClick={() => handleTagClick(tag)}>
@@ -99,7 +95,7 @@ export function EntryCard({entry}){
 
                 {/* Render projects as buttons */}
                 {entry.projects &&(
-                <div>
+                <div onClick={(e => {e.stopPropagation();})}>
                     Projects:{" "}
                     {projectNames.map((project, index) => (
                     <button key={index} onClick={() => handleProjectClick(project)}>
@@ -108,15 +104,16 @@ export function EntryCard({entry}){
                     ))}
                 </div>
                 )}
+                </div>
 
-                <EntryDisplay open={openEntryDisplay} onClose={() => setOpenEntryDisplay(false)} entry={entry} projectNames={projectNames} tagNames={tagNames} />
+                <EntryDisplay open={openEntryDisplay} onCloseDisplay={() => setOpenEntryDisplay(false)} entry={entry} projectNames={projectNames} tagNames={tagNames} />
 
               </div>
             );
 }
 
 
-export function EntryDisplay({open, onClose, entry, projectNames, tagNames}){
+export function EntryDisplay({open, onCloseDisplay, entry, projectNames, tagNames}){
     if (!open) return null;
     const navigate = useNavigate();
 
@@ -131,6 +128,11 @@ export function EntryDisplay({open, onClose, entry, projectNames, tagNames}){
         if (project) {
             navigate(`/projects/${project.name}/${project.id}`);
         }
+    }
+
+    
+    function handleEditClick(){
+        navigate(`/${entry.id}`)
     }
 
     function pinEntry() {
@@ -150,9 +152,11 @@ export function EntryDisplay({open, onClose, entry, projectNames, tagNames}){
       }
 
     return(
-        <div className="overlay" onClick={onClose}>
+        <div className="overlay" onClick={onCloseDisplay}>
             <div key={entry.id} className="entryDisplay" onClick={(e => {e.stopPropagation();})}>
-                <button onClick={onClose}>x</button>
+                <button onClick={onCloseDisplay}>x</button>
+                <button onClick={handleEditClick}>Edit</button>
+
                 <h3>{entry.inputType}</h3>
                 <p>{entry.title}</p>
                 <p>{new Date(entry.timestamp).toLocaleDateString('en-GB')}</p>
@@ -195,9 +199,8 @@ export function EntryDisplay({open, onClose, entry, projectNames, tagNames}){
                     ))}
                 </div>
                 )}
-
-
             </div>
         </div>
     )
 }
+

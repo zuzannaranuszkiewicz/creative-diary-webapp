@@ -3,7 +3,7 @@ import './App.css'
 import Dashboard from './pages/Dashboard'
 import Library from './pages/Library'
 import Calendar from './pages/Calendar'
-import Account from './pages/Account'
+import Account, { SecurityPrivacy, Settings, Subscription } from './pages/Account'
 import WelcomePage from './authentication/WelcomePage'
 import { AuthContextProvider } from './authentication/context/AuthContext'
 import { UserAuth } from './authentication/context/AuthContext'
@@ -37,7 +37,11 @@ function App() {
             <Route path="/projects/:projectName/:projectID" element={<ProtectedRoute><ProjectPage/></ProtectedRoute>}/>
             <Route path="/library" element={<ProtectedRoute><Library/></ProtectedRoute>}/>
             <Route path="/calendar" element={<ProtectedRoute><Calendar/></ProtectedRoute>}/>
-            <Route path="/account" element={<ProtectedRoute><Account/></ProtectedRoute>}/>
+            <Route path="/account" element={<ProtectedRoute><Account/></ProtectedRoute>}>
+                <Route path="settings" element={<ProtectedRoute><Settings/></ProtectedRoute>}/>
+                <Route path="subscription" element={<ProtectedRoute><Subscription/></ProtectedRoute>}/>
+                <Route path="security" element={<ProtectedRoute><SecurityPrivacy/></ProtectedRoute>}/>
+            </Route>
             <Route path=":entryID" element={<ProtectedRoute><EntryEdit/></ProtectedRoute>}/>
           </Routes>
     </AuthContextProvider>

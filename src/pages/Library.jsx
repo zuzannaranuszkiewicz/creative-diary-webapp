@@ -13,6 +13,9 @@ export default function Library(){
         navigate(`/group/${inputType}`)
     }
 
+    function handleProjectClick(inputType){
+        navigate(`/projects`)
+    }
 
     return(
         <>
@@ -44,6 +47,7 @@ export default function Library(){
 
                 <div>
                     <h2>Projects</h2>
+                    <a onClick={() => handleProjectClick()}>see all</a>
                     <ProjectGroup/>
                     <button onClick={() => setOpenModal(true)}>+</button>
                     <AddProject open={openModal} onClose={() => setOpenModal(false)}/>

@@ -8,11 +8,10 @@ import WelcomePage from './authentication/WelcomePage'
 import { AuthContextProvider } from './authentication/context/AuthContext'
 import { UserAuth } from './authentication/context/AuthContext'
 import { BrainDump, ChooseInputType, CreativityBooster, DailyChallenge } from './pages/components/EntryTypes'
-import { GroupPage, ProjectPage, TagsPage } from './pages/GroupAndProjectPage'
+import { GroupPage, ProjectPage, ProjectsGroupPage, TagsPage } from './pages/GroupAndProjectPage'
 import { EntryEdit } from './pages/EntryEdit'
 
 function App() {
-
   const ProtectedRoute = ({children}) => {
     const{user} = UserAuth();
     if(!user) {
@@ -34,6 +33,7 @@ function App() {
             </Route>
             <Route path="/group/:inputType" element={<ProtectedRoute><GroupPage/></ProtectedRoute>}/>
             <Route path="/tags/:tagID/:tagName?" element={<ProtectedRoute><TagsPage/></ProtectedRoute>}/>
+            <Route path="/projects" element={<ProtectedRoute><ProjectsGroupPage/></ProtectedRoute>}/>
             <Route path="/projects/:projectName/:projectID" element={<ProtectedRoute><ProjectPage/></ProtectedRoute>}/>
             <Route path="/library" element={<ProtectedRoute><Library/></ProtectedRoute>}/>
             <Route path="/calendar" element={<ProtectedRoute><Calendar/></ProtectedRoute>}/>

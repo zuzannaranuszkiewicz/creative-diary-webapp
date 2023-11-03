@@ -1,6 +1,6 @@
 import { UserAuth } from "../authentication/context/AuthContext";
 import { EntryGroup } from "./components/EntryGroup";
-import { GetProjects } from "./components/Projects";
+import { GetProjects, ProjectGroup } from "./components/Projects";
 import { SearchBar } from "./components/SearchBar";
 import { SideBar } from "./components/SideBar";
 import { useParams } from "react-router-dom";
@@ -18,16 +18,14 @@ export function GroupPage() {
     )
 }
 
-export function TagsPage() {
-    const {tagID, tagName} = useParams();
-    console.log(tagName,tagID);
+export function ProjectsGroupPage(){
     return (
         <>
         <SideBar/>
-
-        <SearchBar tag={tagID}/>
-        <h2>library/{tagName}</h2>
-        <EntryGroup tags={tagID}/>
+        
+        <SearchBar/> 
+        <h2>library/projects</h2>
+        <ProjectGroup/>
         </>
     )
 }
@@ -55,6 +53,21 @@ export function ProjectPage(){
             {project.description && (<p>{project.description}</p>)}
 
             <EntryGroup projects={projectID}/>
+        </>
+    )
+}
+
+
+export function TagsPage() {
+    const {tagID, tagName} = useParams();
+    console.log(tagName,tagID);
+    return (
+        <>
+        <SideBar/>
+
+        <SearchBar tag={tagID}/>
+        <h2>library/{tagName}</h2>
+        <EntryGroup tags={tagID}/>
         </>
     )
 }

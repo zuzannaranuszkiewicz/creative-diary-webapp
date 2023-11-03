@@ -76,7 +76,7 @@ export function GetEntries(userId) {
 //   });
 // }
 
-// RIGID FILTERING (excludes every entry that does not match) for library and pinned
+
 function filterEntries(entries, filters) {
   // Remove undefined filters
   const definedFilters = Object.fromEntries(Object.entries(filters).filter(([_, value]) => value !== undefined));

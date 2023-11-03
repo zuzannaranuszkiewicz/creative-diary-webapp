@@ -99,7 +99,7 @@ export function ProjectGroup(keywords, lastThree){
     }, [keywords, projects]);
 
     const [filteredProjects, setFilteredProjects] = useState(projects);
-    const renderedProjects = (lastThree == true) ? filteredProjects.slice(-3) : filteredProjects;
+    const renderedProjects = lastThree ? filteredProjects.slice(-3) : filteredProjects;
 
     return (
       <div>
@@ -145,7 +145,7 @@ export function AddProject({open, onClose}){
     const [name, setName] = useState('');
     const [goal, setGoal] = useState('');
     const [description, setDescription] = useState('')
-    
+
     const {user} = UserAuth();
     const userID = user.uid;
     

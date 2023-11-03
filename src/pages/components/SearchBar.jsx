@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ProjectGroup, SelectProject } from "./Projects";
 import { SelectTag } from "./Tags";
 import { EntryGroup } from "./EntryGroup";
@@ -10,18 +10,26 @@ export function SearchBar(props){
 
     const [keywords, setKeywords] = useState('');
     const [selectedProjects, setSelectedProjects] = useState([]);
+    const [selectedInputTypes, setSelectedInputTypes] = useState([]);
     const [selectedTags, setSelectedTags] = useState([]);
     const [showResults, setShowResults] = useState(false);
     const [search, setSearch] = useState(false);
 
     const [searchKeywords, setSearchKeywords] = useState('');
+    const [searchInputTypes, setSearchInputTypes] = useState('');
     const [searchProjects, setSearchProjects] = useState([]);
     const [searchTags, setSearchTags] = useState([]);
     const [sortOrder, setSortOrder] = useState('');
 
     function performSearch(){
         setSearchKeywords(keywords);
-        setSearchTags(selectedTags);
+
+        if(inputType && inputType.length !==0){
+            setSearchInputTypes(inputType)
+        } else {
+            setSearchInputTypes(selectedInputTypes)
+        }
+
         if (tag && tag.length !== 0) {
             setSearchTags(tag);
         } else {
@@ -41,6 +49,8 @@ export function SearchBar(props){
         setSortOrder(event.target.value);
       }
 
+      console.log(searchTags);
+
     return(
         <div>
             <input type="text"
@@ -53,6 +63,8 @@ export function SearchBar(props){
                 {(!project || project.length === 0) && <SelectProject onProjectSelect={setSelectedProjects}/>}
 
                 {(!tag || tag.length === 0) &&  <SelectTag onTagSelect={setSelectedTags}/>}
+
+                {(!inputType || inputType.length === 0) && <SelectInputType onInputTypeSelect={setSelectedInputTypes}/>}
                
 
                 <button onClick={performSearch}>Search</button>
@@ -73,12 +85,10 @@ export function SearchBar(props){
                         </select>
                     </div>
 
-                    <button value="BrainDump" onClick={() => handleClick("BrainDump")}>Brain Dump</button>
-                    <button value="DailyChallenge" onClick={() => handleClick("DailyChallenge")}>Daily Challenge</button>
-                    <button value="CreativityBooster"onClick={() => handleClick("CreativityBooster")} >Creativity Booster</button>
+                    {/*  */}
 
-                    {(!project || project.length === 0) && <ProjectGroup keywords={searchKeywords}/>}
-                    <EntryGroup keywords={searchKeywords} projects={searchProjects} tags={searchTags} inputType={inputType} sortOrder={sortOrder}/>
+                    {(searchKeywords > 0) && <ProjectGroup keywords={searchKeywords}/>}
+                    <EntryGroup keywords={searchKeywords} projects={searchProjects} tags={searchTags} inputType={searchInputTypes} sortOrder={sortOrder}/>
                     </>
                 
             )}
@@ -86,4 +96,41 @@ export function SearchBar(props){
             <hr></hr>
         </div>
     )
+}
+
+export function SelectInputType({ onInputTypeSelect, selectedInputTypes }) {
+    const inputTypes = ["BrainDump", "DailyChallenge", "CreativityBooster"];
+
+    const [internalSelectedInputTypes, setInternalSelectedInputTypes] = useState(selectedInputTypes || []);
+
+    // It toggles the selection of an input type by adding or removing it from the selectedInputTypes array.
+    const handleInputTypeSelect = (inputType) => {
+        const updatedSelectedInputTypes = internalSelectedInputTypes.includes(inputType)
+            ? internalSelectedInputTypes.filter((type) => type !== inputType)
+            : [...internalSelectedInputTypes, inputType];
+    
+        setInternalSelectedInputTypes(updatedSelectedInputTypes);
+        onInputTypeSelect(updatedSelectedInputTypes);
+    };
+    
+    return (
+        <div>
+            {inputTypes.map((inputType) => (
+                <button
+                    key={inputType}
+                    onClick={() => handleInputTypeSelect(inputType)}
+                    style={{
+                        backgroundColor: internalSelectedInputTypes.includes(inputType) ? 'green' : 'gray',
+                        color: 'white',
+                        margin: '5px',
+                        padding: '10px',
+                        border: 'none',
+                        borderRadius: '5px',
+                    }}
+                >
+                    {inputType}
+                </button>
+            ))}
+        </div>
+    );
 }

@@ -1,5 +1,4 @@
 import {Navigate, Routes, Route } from 'react-router-dom'
-import './App.css'
 import Dashboard from './pages/Dashboard'
 import Library from './pages/Library'
 import Calendar from './pages/Calendar'

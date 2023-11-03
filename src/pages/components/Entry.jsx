@@ -16,7 +16,7 @@ export function EntryCard({entry}){
     const [projectNames, setProjectNames] = useState([]);
     const [tagNames, setTagNames] = useState([]);
 
-    const [openEntryOptions, setOpenEntryOptions] = useState(false);
+
     const [openEntryDisplay, setOpenEntryDisplay] = useState(false);
 
     useEffect(() => {
@@ -77,34 +77,35 @@ export function EntryCard({entry}){
                     <p>{new Date(entry.timestamp).toLocaleDateString('en-GB')}</p>
                     <p>{entry.text}</p>
                 
+                    <p onClick={(e) => { e.stopPropagation(); pinEntry(entry, user); }}>
+                        {entry.pinned ? 'Pinned' : 'Pin'}
+                    </p>
                 
 
-                <p onClick={() => pinEntry(entry, user)}>{entry.pinned === "true" ? 'Pinned' : 'Pin'}</p>
+                    {/* Render tags as buttons */}
+                    {entry.tags && (
+                    <div onClick={(e => {e.stopPropagation();})}>
+                        Tags:{" "}
+                        {tagNames.map((tag, index) => (
+                        <button key={index} onClick={() => handleTagClick(tag)}>
+                            {tag.name}
+                        </button>
+                        ))}
+                    </div>
+                    )}
 
-                {/* Render tags as buttons */}
-                {entry.tags && (
-                <div onClick={(e => {e.stopPropagation();})}>
-                    Tags:{" "}
-                    {tagNames.map((tag, index) => (
-                    <button key={index} onClick={() => handleTagClick(tag)}>
-                        {tag.name}
-                    </button>
-                    ))}
-                </div>
-                )}
-
-                {/* Render projects as buttons */}
-                {entry.projects &&(
-                <div onClick={(e => {e.stopPropagation();})}>
-                    Projects:{" "}
-                    {projectNames.map((project, index) => (
-                    <button key={index} onClick={() => handleProjectClick(project)}>
-                        {project.name} {/* Render the 'name' property of the project */}
-                    </button>
-                    ))}
-                </div>
-                )}
-                </div>
+                    {/* Render projects as buttons */}
+                    {entry.projects &&(
+                    <div onClick={(e => {e.stopPropagation();})}>
+                        Projects:{" "}
+                        {projectNames.map((project, index) => (
+                        <button key={index} onClick={() => handleProjectClick(project)}>
+                            {project.name} {/* Render the 'name' property of the project */}
+                        </button>
+                        ))}
+                    </div>
+                    )}
+                    </div>
 
                 <EntryDisplay open={openEntryDisplay} onCloseDisplay={() => setOpenEntryDisplay(false)} entry={entry} projectNames={projectNames} tagNames={tagNames} />
 
@@ -130,26 +131,9 @@ export function EntryDisplay({open, onCloseDisplay, entry, projectNames, tagName
         }
     }
 
-    
     function handleEditClick(){
         navigate(`/${entry.id}`)
     }
-
-    function pinEntry() {
-        const entryRef = ref(database, `entries/${user.uid}/${entry.id}`);
-      
-        if (entry.pinned === true) {
-          update(entryRef, {
-            pinned: null
-          });
-          alert("Entry unpinned!");
-        } else {
-          update(entryRef, {
-            pinned: true
-          });
-          alert("Entry pinned!");
-        }
-      }
 
     return(
         <div className="overlay" onClick={onCloseDisplay}>
@@ -173,8 +157,6 @@ export function EntryDisplay({open, onCloseDisplay, entry, projectNames, tagName
                 ></iframe> */}
 
                 <p>{entry.text}</p>
-
-                <p onClick={() => pinEntry(entry, user)}>{entry.pinned === "true" ? 'Pinned' : 'Pin'}</p>
 
                 {/* Render tags as buttons */}
                 {entry.tags && (

@@ -75,14 +75,35 @@ export function GetProjects(userId) {
 }
 
 
+function filterProjects(projects, keywords) {
+    if (!keywords) {
+      return projects; // Return all projects if no keyword is provided
+    }
+    const filteredProjects = projects.filter((project) =>
+      project.name.toLowerCase().includes(keywords.toLowerCase())
+    );
+    return filteredProjects;
+  }
 
-export function ProjectGroup(){
+
+export function ProjectGroup(keywords, lastThree){
     const { user } = UserAuth();
     const projects = GetProjects(user.uid);
   
+    useEffect(()=> {
+        let filtered = projects;
+        if (keywords.lenght > 0){
+            filtered = filterProjects(projects, keywords);
+        }
+        setFilteredProjects(filtered);
+    }, [keywords, projects]);
+
+    const [filteredProjects, setFilteredProjects] = useState(projects);
+    const renderedProjects = (lastThree == true) ? filteredProjects.slice(-3) : filteredProjects;
+
     return (
       <div>
-        {projects.map((project) => (
+        {renderedProjects.map((project) => (
           <ProjectCard key={project.id} project={project}/>
         ))}
       </div>
@@ -92,7 +113,6 @@ export function ProjectGroup(){
 
 export function ProjectCard({project}){
     const navigate = useNavigate();
-
     function handleProjectClick(project) {
         if (project) {
             navigate(`/projects/${project.name}/${project.id}`);

@@ -17,6 +17,7 @@ export function SearchBar(props){
     const [searchKeywords, setSearchKeywords] = useState('');
     const [searchProjects, setSearchProjects] = useState([]);
     const [searchTags, setSearchTags] = useState([]);
+    const [sortOrder, setSortOrder] = useState('');
 
     function performSearch(){
         setSearchKeywords(keywords);
@@ -35,6 +36,10 @@ export function SearchBar(props){
         setSearch(false);
         setShowResults(true);
     }
+
+    function handleSortingChange(event) {
+        setSortOrder(event.target.value);
+      }
 
     return(
         <div>
@@ -59,9 +64,22 @@ export function SearchBar(props){
 
             {showResults && (
                 <>
-                {(!project || project.length === 0) && <ProjectGroup/>}
-                <EntryGroup keywords={searchKeywords} projects={searchProjects} tags={searchTags} inputType={inputType}/>
-                </>
+                    <div>
+                        Sorting:
+                        <select value={sortOrder} onChange={handleSortingChange}>
+                            <option value="">Select</option>
+                            <option value="newest">From Newest</option>
+                            <option value="oldest">From Oldest</option>
+                        </select>
+                    </div>
+
+                    <button value="BrainDump" onClick={() => handleClick("BrainDump")}>Brain Dump</button>
+                    <button value="DailyChallenge" onClick={() => handleClick("DailyChallenge")}>Daily Challenge</button>
+                    <button value="CreativityBooster"onClick={() => handleClick("CreativityBooster")} >Creativity Booster</button>
+
+                    {(!project || project.length === 0) && <ProjectGroup keywords={searchKeywords}/>}
+                    <EntryGroup keywords={searchKeywords} projects={searchProjects} tags={searchTags} inputType={inputType} sortOrder={sortOrder}/>
+                    </>
                 
             )}
 

@@ -4,8 +4,7 @@ import { signOut } from "firebase/auth";
 import { Outlet, useNavigate } from "react-router-dom";
 import { auth, database } from "../../firebase-config";
 import { GetUser } from "./components/functions/functions";
-import { useState, useEffect, useContext } from "react";
-import { ThemeContext } from "./components/functions/ThemeSwitch";
+import { useState, useEffect} from "react";
 import { onValue, ref, update } from "firebase/database";
 
 export default function Account(){
@@ -84,12 +83,10 @@ export function Settings({setTheme}){
     };
 
     const setLightTheme = () => {
-        console.log('Switching to light theme');
         switchTheme('light');
     };
 
     const setDarkTheme = () => {
-        console.log('Switching to dark theme');
         switchTheme('dark');
     };
   

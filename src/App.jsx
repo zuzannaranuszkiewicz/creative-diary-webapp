@@ -9,6 +9,8 @@ import { UserAuth } from './authentication/context/AuthContext'
 import { BrainDump, ChooseInputType, CreativityBooster, DailyChallenge } from './pages/components/EntryTypes'
 import { GroupPage, ProjectPage, ProjectsGroupPage, TagsPage } from './pages/GroupAndProjectPage'
 import { EntryEdit } from './pages/EntryEdit'
+import LogIn from './authentication/forms/LogIn'
+import CreateAccount from './authentication/forms/CreateAccount'
 
 function App() {
   const ProtectedRoute = ({children}) => {
@@ -23,9 +25,12 @@ function App() {
     <>
     <AuthContextProvider>
           <Routes>
-            <Route path="/" element={<WelcomePage/>}/>
+            <Route path="/" element={<WelcomePage/>}>
+              <Route index element={<LogIn/>}/>
+              <Route path="createAccount" element={<CreateAccount/>}/>
+            </Route>
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard/></ProtectedRoute>}>
-                <Route path="BrainDump" element={<ProtectedRoute><BrainDump/></ProtectedRoute>}/>
+                <Route index path="BrainDump" element={<ProtectedRoute><BrainDump/></ProtectedRoute>}/>
                 <Route path="DailyChallenge" element={<ProtectedRoute><DailyChallenge/></ProtectedRoute>}/>
                 <Route path="CreativityBooster" element={<ProtectedRoute><CreativityBooster/></ProtectedRoute>}/>
                 <Route path="ChooseEntryType" element={<ProtectedRoute><ChooseInputType/></ProtectedRoute>}/>

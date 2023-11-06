@@ -8,10 +8,6 @@ export default function WelcomePage(){
     return(
         <>
           <Outlet/>
-
-          
-          <LogIn/>
-          <CreateAccount/>  
         </>
     )
 }

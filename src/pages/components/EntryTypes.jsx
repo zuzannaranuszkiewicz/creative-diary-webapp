@@ -28,7 +28,7 @@ export function SaveEntry({open, onClose, ...props}){
     if (!open) return null;
     const navigate = useNavigate();
     const [openModal, setOpenModal] = useState(false);
-    const {inputType, title, userInput, promptID} = props;
+    const {inputType, title, userInput, ChallengePromptID, BoosterPromptID} = props;
     const [selectedProjects, setSelectedProjects] = useState([]);
     const [selectedTags, setSelectedTags] = useState([]);
 
@@ -52,8 +52,11 @@ export function SaveEntry({open, onClose, ...props}){
             entryData.title = title;
         }
         
-        if (promptID) {
-            entryData.promptID = promptID;
+        if (ChallengePromptID) {
+            entryData.promptID = ChallengePromptID;
+        }
+        if (BoosterPromptID) {
+            entryData.promptID = BoosterPromptID;
         }
         
         if (selectedProjects && selectedProjects.length > 0) {
@@ -66,8 +69,12 @@ export function SaveEntry({open, onClose, ...props}){
 
         set(newEntry, entryData);
 
-        if (promptID){
-            set(ref(database, 'users/' + userID + '/prompts/' + promptID), true);
+        if (ChallengePromptID){
+            set(ref(database, 'users/' + userID + '/prompts/DailyChallenge/' + ChallengePromptID), true);
+        }
+
+        if (BoosterPromptID){
+            set(ref(database, 'users/' + userID + '/prompts/CreativityBooster/' + BoosterPromptID), true);
         }
 
         // confirmation
@@ -155,42 +162,132 @@ export function BrainDump(){
 }
 
 
-export function DailyChallenge(){
-    // const navigate = useNavigate();
+function fetchTodayPromptID(inputType, userID, setGeneratedID) {
+    const todayDate = currentDate();
+    const userTodayPromptRef = ref(database, `users/${userID}/prompts/todayPrompt/${inputType}`);
+
+    onValue(userTodayPromptRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data && data.updateDate === todayDate) {
+            setGeneratedID(data.promptID);
+        } else {
+            // PROMISE 
+            generateUniquePromptID(inputType, userID, setGeneratedID).then(newID => {
+                setGeneratedID(newID);
+                set(userTodayPromptRef, { updateDate: todayDate, promptID: newID });
+            }).catch(error => {
+                console.error("Error occurred: ", error);
+            });
+        }
+    });
+}
+
+function generateUniquePromptID(inputType, userID, setGeneratedID) {
+    return new Promise((resolve, reject) => {
+        generateNewID(inputType, userID, resolve, reject);
+    });
+}
+
+function generateNewID(inputType, userID, resolve, reject) {
+    const newGeneratedID = Math.floor(Math.random() * 41) + 1;
+    const userPromptsRef = ref(database, `users/${userID}/prompts/${inputType}/`);
+
+    onValue(userPromptsRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data && data[newGeneratedID]) {
+            generateNewID(inputType, userID, resolve, reject);
+        } else {
+            resolve(newGeneratedID);
+        }
+    });
+}
+
+
+export function DailyChallenge() {
     const [prompt, setPrompt] = useState('');
     const [userInput, setUserInput] = useState('');
-    const [generatedID, setGeneratedID] = useState ('');
     const [openSave, setOpenSave] = useState(false);
-    const {user} = UserAuth();
+    const [generatedID, setGeneratedID] = useState('');
+    const { user } = UserAuth();
     const userID = user.uid;
 
     useEffect(() => {
-        generateUniquePromptID();
+        fetchTodayPromptID("DailyChallenge", userID, setGeneratedID); // !!!!!!!!!
     }, []);
 
     useEffect(() => {
-        // calling function we just wrote, cuz otherwise they won't work 
-        generatePrompt(); // generate ID
-    }, [generatedID]); //running UseEffect every time, when generatedID changes
+        generatePrompt();
+    }, [generatedID]);
 
-    function generateUniquePromptID() {
-        let newGeneratedID = Math.floor(Math.random() * 41) + 1; 
-        //loading data from user, checking if they already answered for this prompt
-        const userPromptsRef = ref(database, 'users/' + userID + '/prompts/');
-        onValue(userPromptsRef, (snapshot) => {
-            const data = snapshot.val();
-            if (data && data[newGeneratedID]) {
-                generateUniquePromptID(); // if ID already exists, generate a new one (call function again)
-            } else {
-                setGeneratedID(newGeneratedID); // if Id is not used yet, set the generated ID
-            }
-        });
+    function generatePrompt() {
+        if (generatedID !== '') {
+            const promptRef = ref(database, `prompts/DailyChallenge/${generatedID}`);
+            onValue(promptRef, (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    setPrompt(data.prompt);
+                }
+            });
+        }
     }
+
+    return (
+        <>
+            <div>
+                <div>
+                    <h2>{prompt}</h2>
+                    <p>{currentDate()}</p>
+                    <input
+                        type="text"
+                        value={userInput}
+                        onChange={(e) => setUserInput(e.target.value)}
+                        placeholder="What is it you're thinking of..."
+                    />
+                </div>
+                <button onClick={() => setOpenSave(true)}>Save</button>
+                <SaveEntry
+                    open={openSave}
+                    inputType="DailyChallenge"
+                    title={prompt}
+                    userInput={userInput}
+                    ChallengePromptID={generatedID}
+                    onClose={() => setOpenSave(false)}
+                />
+            </div>
+        </>
+    );
+}
+
+
+export function CreativityBooster(){
+    const [prompt, setPrompt] = useState('');
+    const [userInput, setUserInput] = useState('');
+    const [openSave, setOpenSave] = useState(false);
+    const [generatedID, setGeneratedID] = useState('');
+    const [showPrompt, setShowPrompt] = useState(false)
+    const { user } = UserAuth();
+    const userID = user.uid;
+
+    useEffect(() => {
+        const hasInteracted = localStorage.getItem('hasInteracted');
+        if (!hasInteracted) {
+            setShowPrompt(true);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchTodayPromptID("CreativityBooster", userID, setGeneratedID); // !!!!!!!!!
+    }, []);
+
+
+    useEffect(() => {
+        generatePrompt();
+    }, [generatedID]);
 
     function generatePrompt() {
         // loading prompt data, searching for the one with ID we just generated
         if(generatedID !== '') {
-            const promptRef = ref(database, `prompts/${generatedID}`);
+            const promptRef = ref(database, `prompts/CreativityBooster/${generatedID}`);
             onValue(promptRef, (snapshot) => {
                 const data = snapshot.val();
                 if (data) {setPrompt(data.prompt);}
@@ -198,32 +295,46 @@ export function DailyChallenge(){
             }
     }
 
-    return(
-        <>
-            <div>
-                <div>
-                    <h2>{prompt}</h2>
-                    <p>{currentDate()}</p>
-                    <input type="text" value={userInput} onChange={(e => setUserInput(e.target.value))} placeholder="What is it you're thinking of..."/>
-                </div>
-                <button onClick={() => setOpenSave(true)}>Save</button>
-                <SaveEntry open={openSave} inputType="DailyChallenge" title={prompt} userInput={userInput} promptID={generatedID} onClose={() => setOpenSave(false)}/>
-
-            </div>  
-        </>
-    )
-}
-
-export function CreativityBooster(){
-    const navigate = useNavigate();
-    function openSTH(){
-        navigate('/dashboard/ChooseEntryType');
+    function showCreativityBooster() {
+        localStorage.setItem('hasInteracted', true);
+        setShowPrompt(true);
     }
 
     return(
-        <>
-            <h2>Today's activity</h2>
-            <button onClick={openSTH}>Save</button>
-        </>
+        <div>
+
+            {showPrompt === false && (
+                <div>
+                    <div onClick={showCreativityBooster}>
+                        <img></img>
+                        <p>img1</p>
+                    </div>
+
+                    <div onClick={showCreativityBooster}>
+                        <img></img>
+                        <p>img2</p>
+                    </div>
+
+                    <div onClick={showCreativityBooster}>
+                        <img></img>
+                        <p>Bimg3</p>
+                    </div>
+                </div>
+            ) }
+            
+            {showPrompt === true &&(
+                <div>
+                    <div>
+                        <h2>{prompt}</h2>
+                        <p>{currentDate()}</p>
+                        <input type="text" value={userInput} onChange={(e => setUserInput(e.target.value))} placeholder="Show your creation here..."/>
+                    </div>
+                    <button onClick={() => setOpenSave(true)}>Save</button>
+                    <SaveEntry open={openSave} inputType="CreativityBooster" title={prompt} userInput={userInput} BoosterPromptID={generatedID} onClose={() => setOpenSave(false)}/>
+                </div>
+            ) }
+            
+          
+        </div>  
     )
 }

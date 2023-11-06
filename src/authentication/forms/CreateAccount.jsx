@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../../../firebase-config";
 import { database } from "../../../firebase-config";
@@ -64,6 +64,9 @@ export default function CreateAccount(){
 
                 <button type="submit">Create Account</button>
             </form>
+
+            <p>Already Have An Account?</p>
+            <Link to="/logIn"><p>Sign Up Now</p></Link>
         </section>
     )
 

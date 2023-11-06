@@ -153,10 +153,12 @@ export function EntryGroup(props){
     const renderedEntries = props.lastThree ? filteredEntries.slice(-3) : filteredEntries;// State for storing the filtered entries
 
   return (
-    <div>
-      {renderedEntries.map((entry) => (
-        <EntryCard key={entry.id} entry={entry} />
-      ))}
+    <div className="entryGroup">
+      {renderedEntries.length > 0 ? (
+        renderedEntries.map((entry) => <EntryCard key={entry.id} entry={entry} />)
+      ) : (
+        <p>No entries to display</p>
+      )}
     </div>
   );
 }

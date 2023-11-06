@@ -16,6 +16,8 @@ export default function CreateAccount(){
         set(ref(database, 'users/' + userID), {
             username: username,
             email: email,
+            theme: light,
+            color: green
         });
       }
 

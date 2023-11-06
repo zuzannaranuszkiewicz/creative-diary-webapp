@@ -103,9 +103,13 @@ export function ProjectGroup(keywords, lastThree){
 
     return (
       <div>
-        {renderedProjects.map((project) => (
-          <ProjectCard key={project.id} project={project}/>
-        ))}
+            {renderedProjects.length > 0 ? (
+                renderedProjects.map((project) => (
+                    <ProjectCard key={project.id} project={project} />
+                ))
+            ) : (
+                <p>No projects to display</p>
+            )}
       </div>
     );
 }

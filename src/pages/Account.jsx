@@ -2,9 +2,11 @@ import { SideBar } from "./components/SideBar";
 import { UserAuth } from "../authentication/context/AuthContext";
 import { signOut } from "firebase/auth";
 import { Outlet, useNavigate } from "react-router-dom";
-import { auth } from "../../firebase-config";
+import { auth, database } from "../../firebase-config";
 import { GetUser } from "./components/functions/functions";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { ThemeContext } from "./components/functions/ThemeSwitch";
+import { onValue, ref, update } from "firebase/database";
 
 export default function Account(){
     const navigate = useNavigate();
@@ -61,7 +63,36 @@ export default function Account(){
     )
 }
 
-export function Settings(){
+export function Settings({setTheme}){
+    const { user } = UserAuth();
+    const userID = user.uid;
+
+    useEffect(() => {
+        const themeRef = ref(database, `users/${userID}/theme`);
+
+        onValue(themeRef, (snapshot) => {
+        const theme = snapshot.val();
+        if (theme) {
+            setTheme(theme);
+        }
+        });
+    }, [userID, setTheme]);
+
+    const switchTheme = (selectedTheme) => {
+        setTheme(selectedTheme);
+        update(ref(database, `users/${userID}`), { theme: selectedTheme }); // Update the theme in the database
+    };
+
+    const setLightTheme = () => {
+        console.log('Switching to light theme');
+        switchTheme('light');
+    };
+
+    const setDarkTheme = () => {
+        console.log('Switching to dark theme');
+        switchTheme('dark');
+    };
+  
 
     return(
         <>
@@ -71,6 +102,10 @@ export function Settings(){
 
             <h3>Customization</h3>
             <p>Themes</p>
+            <div>
+                <button onClick={setLightTheme}>Light</button>
+                <button onClick={setDarkTheme}>Dark</button>
+            </div>
             <p>Accent Colour</p>
             <p>Custom Toolbar</p>
             <p>Custom Week Display</p>

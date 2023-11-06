@@ -25,11 +25,12 @@ function App() {
   }
 
   const [theme, setTheme] = useState('dark');
+  const [accColor, setAccColor] = useState("green");
 
   return (
     <>
     <AuthContextProvider>
-        <div id="themeContainer" className={theme}>
+        <div id="themeContainer" className={`${theme} ${accColor}`}>
         <Routes>
               <Route path="/" element={<WelcomePage/>}>
                 <Route index element={<LogIn/>}/>
@@ -48,7 +49,7 @@ function App() {
               <Route path="/library" element={<ProtectedRoute><Library/></ProtectedRoute>}/>
               <Route path="/calendar" element={<ProtectedRoute><Calendar/></ProtectedRoute>}/>
               <Route path="/account" element={<ProtectedRoute><Account/></ProtectedRoute>}>
-                  <Route path="settings" element={<ProtectedRoute><Settings  setTheme={setTheme} /></ProtectedRoute>}/>
+                  <Route path="settings" element={<ProtectedRoute><Settings  setTheme={setTheme} setAccColor={setAccColor} /></ProtectedRoute>}/>
                   <Route path="subscription" element={<ProtectedRoute><Subscription/></ProtectedRoute>}/>
                   <Route path="security" element={<ProtectedRoute><SecurityPrivacy/></ProtectedRoute>}/>
               </Route>

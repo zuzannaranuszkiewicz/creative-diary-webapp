@@ -40,6 +40,29 @@
     background-color: var(--background);
   }
 
+  .green{
+    --accCol:#7BBB96;
+  }
+  .red{
+    --accCol: #FF5F5F;
+  }
+  .purple{
+    --accCol: #9287D7;
+  }
+  .yellow{
+    --accCol: #FDC83A;
+  }
+  .orange{
+    --accCol: #FFA552;
+  }
+  .blue{
+    --accCol: #87CDD7;
+  }
+  .pink{
+    --accCol: #F896AD;
+  }
+
+
 
 
 #root {
@@ -56,4 +79,8 @@ body {
   place-items: center;
   min-width: 320;
   min-height: 100vh;
+}
+
+button{
+  background-color: var(--accCol);
 }

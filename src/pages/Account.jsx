@@ -62,7 +62,7 @@ export default function Account(){
     )
 }
 
-export function Settings({setTheme}){
+export function Settings({setTheme, setAccColor}){
     const { user } = UserAuth();
     const userID = user.uid;
 
@@ -89,6 +89,23 @@ export function Settings({setTheme}){
     const setDarkTheme = () => {
         switchTheme('dark');
     };
+
+
+
+    useEffect(() => {
+        const accColorRef = ref(database, `users/${userID}/color`);
+        onValue(accColorRef, (snapshot) => {
+          const color = snapshot.val();
+          if (color) {
+            setAccColor(color);
+          }
+        });
+      }, [userID, setAccColor]);
+    
+    const setAccentColor = (selectedColor) => {
+        setAccColor(selectedColor);
+        update(ref(database, `users/${userID}`), { color: selectedColor });
+    };
   
 
     return(
@@ -104,6 +121,14 @@ export function Settings({setTheme}){
                 <button onClick={setDarkTheme}>Dark</button>
             </div>
             <p>Accent Colour</p>
+                <button onClick={()=>{setAccentColor("green")}}>Green</button>
+                <button onClick={()=>{setAccentColor("red")}}>Red</button>
+                <button onClick={()=>{setAccentColor("purple")}}>Purple</button>
+                <button onClick={()=>{setAccentColor("yellow")}}>Yellow</button>
+                <button onClick={()=>{setAccentColor("orange")}}>Orange</button>
+                <button onClick={()=>{setAccentColor("blue")}}>Blue</button>
+                <button onClick={()=>{setAccentColor("pink")}}>Pink</button>
+
             <p>Custom Toolbar</p>
             <p>Custom Week Display</p>
             <p>Custom Date Format</p>

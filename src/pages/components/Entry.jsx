@@ -11,7 +11,6 @@ export function EntryCard({entry}){
     const { user } = UserAuth();
     const projects = GetProjects(user.uid);
     const tags = GetTags(user.uid);
-    // navigate to "entry" page after clicking on it
     const navigate = useNavigate();
     const [projectNames, setProjectNames] = useState([]);
     const [tagNames, setTagNames] = useState([]);

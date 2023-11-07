@@ -17,7 +17,8 @@
     "react": "^18.2.0",
     "react-calendar": "^4.6.1",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.17.0"
+    "react-router-dom": "^6.17.0",
+    "router-dom": "^2.2.11"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

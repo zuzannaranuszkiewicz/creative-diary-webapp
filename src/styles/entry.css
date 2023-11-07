@@ -110,3 +110,27 @@
     display: grid;
     grid-template-columns: 75% 25%;
 }
+
+.overlay{
+    position: fixed; /* Sit on top of the page content */
+    display: none; /* Hidden by default */
+    width: 100vw; /* Full width (cover the whole page) */
+    height: 100vh; /* Full height (cover the whole page) */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+    cursor: pointer; /* Add a pointer on hover */
+}
+
+.entryDisplay{
+    display: flex;
+    width: 61rem;
+    height: 51.75rem;
+    padding: 1.9375rem 0.9995rem 37rem 1rem;
+justify-content: center;
+align-items: center;
+flex-shrink: 0;
+}

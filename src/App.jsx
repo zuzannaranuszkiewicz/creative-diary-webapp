@@ -24,7 +24,7 @@ function App() {
     return children;
   }
 
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState('light');
   const [accColor, setAccColor] = useState("green");
 
   return (

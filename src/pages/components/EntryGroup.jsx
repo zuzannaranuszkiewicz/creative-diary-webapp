@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { database } from "../../../firebase-config";
 import { ref, onValue } from "firebase/database";
 import { EntryCard } from "./Entry";
+import "../../styles/entry.css"
+
 
 
 export function GetEntries(userId) {

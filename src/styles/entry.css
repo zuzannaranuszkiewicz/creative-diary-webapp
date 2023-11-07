@@ -1,0 +1,112 @@
+@import url("../index.css");
+
+.entryGroup{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 2rem;
+
+
+}
+
+.entryCard{
+    width: 26rem;
+    height: 17.75rem;
+
+    border-radius: 0.3125rem;
+    border: 1px solid var(--light-theme-paper-border, rgba(255, 255, 255, 0.20));
+    background: var(--lightElem, #FDFDFD);
+
+    display: flex;
+    flex-direction: row;
+
+    box-shadow: 6px 6px 16px 0px rgba(209, 205, 199, 0.50), -6px -6px 16px 0px rgba(255, 255, 255, 0.50);
+
+    background-color: var(--lightElem);
+}
+
+.entryPinned{
+    background-color: var(--accCol);
+    display: inline-block;
+    height: 100%;
+    margin: 0;
+    width: 1rem;
+    border-radius: .3125rem 0 0 .3125rem  ;
+}
+
+.entryCardContent{
+    min-width: 23rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 1rem;
+    margin: 1rem;
+}
+
+.BrainDumpDot{
+    background-color: var(--brainDump);
+    height: 0.75rem;
+    width: 0.75rem;
+    border-radius: 50%;
+    margin: 0 0.5rem 0 0;
+    display: inline-block;
+}
+
+.DailyChallengeDot{
+    background-color: var(--dailyChallenge);
+    height: 0.75rem;
+    width: 0.75rem;
+    border-radius: 50%;
+    margin: 0 0.5rem 0 0;
+    display: inline-block;
+}
+
+.CreativityBoosterDot{
+    background-color: var(--creativityBooster);
+    height: 0.75rem;
+    width: 0.75rem;
+    border-radius: 50%;
+    margin: 0 0.5rem 0 0;
+    display: inline-block;
+}
+
+.inputType{
+    margin: 0;
+}
+
+.entryDate{
+    color:var(--textInput2);
+    font-size: 1rem;
+    font-weight: 400;
+}
+
+.entryTitle{
+    color: var(--text);
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 0.5rem 0;
+    padding: 0;
+}
+
+.entryText{
+    font-size: 1.25rem;
+    font-weight: 400;
+    margin: 0.5rem 0;
+    padding: 0;
+}
+
+
+.tagButton {
+    color: var(--lightElem);
+}
+
+.projectButton {
+    background-color: var(--background);
+    color: var(--accCol);
+
+}
+
+.buttons-row{
+    display: grid;
+    grid-template-columns: 75% 25%;
+}

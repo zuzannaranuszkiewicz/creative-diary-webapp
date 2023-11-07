@@ -30,7 +30,7 @@ function App() {
   return (
     <>
     <AuthContextProvider>
-        <div id="themeContainer" className={`${theme} ${accColor}`}>
+        <div id="AppContainer" className={`${theme} ${accColor}`}>
         <Routes>
               <Route path="/" element={<WelcomePage/>}>
                 <Route index element={<LogIn/>}/>

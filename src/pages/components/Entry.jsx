@@ -5,6 +5,7 @@ import { GetProjects } from "./Projects";
 import { GetTags } from "./Tags";
 import { database } from "../../../firebase-config";
 import { ref, set, update } from "firebase/database";
+import "../../styles/entry.css"
 
 
 export function EntryCard({entry}){
@@ -69,45 +70,52 @@ export function EntryCard({entry}){
       }
     
     return(
-              <div key={entry.id} className="entryCard" >
-                <div onClick={() => setOpenEntryDisplay(true)}>
-                    <h3>{entry.inputType}</h3>
-                    <p>{entry.title}</p>
-                    <p>{new Date(entry.timestamp).toLocaleDateString('en-GB')}</p>
-                    <p>{entry.text}</p>
-                
-                    <p onClick={(e) => { e.stopPropagation(); pinEntry(entry, user); }}>
-                        {entry.pinned ? 'Pinned' : 'Pin'}
-                    </p>
-                
+              <div className="entryCard" key={entry.id}  >
+                {entry.pinned ? <div className="entryPinned"></div> : null}
+                <div className="entryCardContent" onClick={() => setOpenEntryDisplay(true)}>
+                    
+                    <p className="inputType"><span className={`${entry.inputType}Dot`}></span>{entry.inputType}</p>
+                    
+                    <div className="entryMiddle">
+                        <p className="entryDate">{new Date(entry.timestamp).toLocaleDateString('en-GB')}</p>
+                        <p className="entryTitle">{entry.title && (entry.title.length > 15 ? `${entry.title.substring(0, 15)}...` : entry.title)}</p>
+                        <p className="entryText">{entry.text && (entry.text.length > 30 ? `${entry.text.substring(0, 30)}...` : entry.text)}</p>
+                    </div>
 
-                    {/* Render tags as buttons */}
-                    {entry.tags && (
-                    <div onClick={(e => {e.stopPropagation();})}>
-                        Tags:{" "}
-                        {tagNames.map((tag, index) => (
-                        <button key={index} onClick={() => handleTagClick(tag)}>
-                            {tag.name}
-                        </button>
-                        ))}
-                    </div>
-                    )}
+                    <div className="buttons-row">
+                        <div>
+                            {/* Render projects as buttons */}
+                            {entry.projects && (
+                            <div onClick={(e) => { e.stopPropagation(); }}>
+                                {projectNames.slice(0, 2).map((project, index) => (
+                                <button className="projectButton" key={index} onClick={() => handleProjectClick(project)}>
+                                    {project.name} {/* Render the 'name' property of the project */}
+                                </button>
+                                ))}
+                            </div>
+                            )}
 
-                    {/* Render projects as buttons */}
-                    {entry.projects &&(
-                    <div onClick={(e => {e.stopPropagation();})}>
-                        Projects:{" "}
-                        {projectNames.map((project, index) => (
-                        <button key={index} onClick={() => handleProjectClick(project)}>
-                            {project.name} {/* Render the 'name' property of the project */}
-                        </button>
-                        ))}
+                            {/* Render tags as buttons */}
+                            {entry.tags && (
+                            <div onClick={(e) => { e.stopPropagation(); }}>
+                                {tagNames.slice(0, 2).map((tag, index) => (
+                                <button className="tagButton" key={index} onClick={() => handleTagClick(tag)}>
+                                    #{tag.name}
+                                </button>
+                                ))}
+                            </div>
+                            )}
+                        </div>
+
+                        <button onClick={(e) => { e.stopPropagation(); pinEntry(entry, user); }}>
+                        {entry.pinned ? 'Pinned' : 'Pin'}</button>
                     </div>
-                    )}
-                    </div>
+                    
+
+                    
+                </div>
 
                 <EntryDisplay open={openEntryDisplay} onCloseDisplay={() => setOpenEntryDisplay(false)} entry={entry} projectNames={projectNames} tagNames={tagNames} />
-
               </div>
             );
 }

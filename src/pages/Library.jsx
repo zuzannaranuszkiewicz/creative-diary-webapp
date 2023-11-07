@@ -33,7 +33,6 @@ export default function Library(){
                     <EntryGroup pinned={true}/>
                 </div>
 
-                <hr></hr>
 
                 <div>
                     <h2>Brain Dump</h2>

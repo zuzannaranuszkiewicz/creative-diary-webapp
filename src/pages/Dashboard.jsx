@@ -40,23 +40,29 @@ export default function Dashboard(){
     return(
         <>
             <SideBar/>
-            <p>{currentDayAndDate()}</p>
-            <h1>This is dashboard</h1>
+            <div className="flex-col">
+                  <p>{currentDayAndDate()}</p>
+                <section>
+                    <select value={selectedOption} onChange={changeDisplay}>
+                        <option value="BrainDump">Brain Dump</option>
+                        <option value="DailyChallenge">Daily Challenge</option>
+                        <option value="CreativityBooster">Creativity Booster</option>
+                    </select>
+                    
+                    <div className="flex-row">
+                        <Outlet/>
+                        <div>
+                            <div className="Streak"></div>
+                            <div className="A Letter To Myself"></div>
+                        </div>
+                    </div>
+                </section>
 
-            {/* "if(&&) there is userName and userName contains userName, display <p></p>" */}
-            {userName && userName.username && (<p>Welcome, {userName.username}</p>)}
-            <section>
-                <select value={selectedOption} onChange={changeDisplay}>
-                    <option value="BrainDump">Brain Dump</option>
-                    <option value="DailyChallenge">Daily Challenge</option>
-                    <option value="CreativityBooster">Creativity Booster</option>
-                </select>
-            </section>
-
-            <Outlet/>
-        
-            <h2>Today's entries:</h2>
-            <EntryGroup date={currentDate()}/>
+                <section>
+                    <h2>Today's entries:</h2>
+                    <EntryGroup date={currentDate()}/>
+                </section>
+            </div>
         </>
     )
 }

@@ -5,6 +5,7 @@ import { database } from "../../../firebase-config";
 import { UserAuth } from "../../authentication/context/AuthContext";
 import { AddProject, SelectProject } from "./Projects";
 import { AddTag, SelectTag } from "./Tags";
+import "../../styles/entryTypes.css"
 
 // function to get time and display it below title
 // it is global, so can be used in all functions below
@@ -22,6 +23,40 @@ export const currentDate = () => {
       year;
     return formattedDate;
   }; 
+
+const DailyChallengeTimer = () => {
+  const [timeLeft, setTimeLeft] = useState("");
+
+  useEffect(() => {
+    const calculateTimeLeft = () => {
+      const now = new Date();
+      const midnight = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate() + 1,
+        0, 0, 0
+      );
+      const timeDifference = midnight.getTime() - now.getTime();
+
+      let hours = Math.floor(timeDifference / (1000 * 60 * 60));
+
+      hours = hours < 10 ? "0" + hours : hours;
+
+      setTimeLeft(`${hours}`);
+    };
+
+    const timer = setInterval(() => {
+      calculateTimeLeft();
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  return(
+    <p>{timeLeft}h</p>
+  )
+};
+
 
 
 export function SaveEntry({open, onClose, ...props}){
@@ -111,31 +146,35 @@ export function SaveEntry({open, onClose, ...props}){
 
 export function ChooseInputType(){
     return(
-        <>
-            <h2>Choose a new entry</h2>
-            <div>
-                <Link to="/dashboard/BrainDump">
+        <section>
+            <h2>Where Will Your Pen Take You Today?</h2>
+                <p>Pick Your Entry Of Choice</p>
+                <div>
                     <div>
-                        <img></img>
-                        <p>Brain Dump</p>
-                    </div>
-                </Link>
+                        <Link to="/dashboard/BrainDump">
+                            <div>
+                                <img></img>
+                                <p>Brain Dump</p>
+                            </div>
+                        </Link>
 
-                <Link to="/dashboard/DailyChallenge">
-                    <div>
-                        <img></img>
-                        <p>Daily Challenge</p>
-                    </div>
-                </Link>
+                        <Link to="/dashboard/DailyChallenge">
+                            <div>
+                                <div className="DailyChallengeTimer"><DailyChallengeTimer/></div>
+                                <img></img>
+                                <p>Daily Challenge</p>
+                            </div>
+                        </Link>
 
-                <Link to="/dashboard/CreativityBooster">
-                    <div>
-                        <img></img>
-                        <p>Creativity Booster</p>
+                        <Link to="/dashboard/CreativityBooster">
+                            <div>
+                                <img></img>
+                                <p>Creativity Booster</p>
+                            </div>
+                        </Link>
                     </div>
-                </Link>
-            </div>
-        </>
+                </div>
+        </section>
     )
 }
 
